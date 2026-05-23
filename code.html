@@ -1,0 +1,3038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<meta name="theme-color" content="#F4EBD7">
+<title>The Computing Society | AIOU — Student Tech Community</title>
+  <!-- FAVICON - BROWSER TAB LOGO -->
+  <link rel="icon" type="image/png" href="icon.png">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* Event Expanded Content */
+.event-expanded {
+  display: none;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  padding: 25px;
+  background: var(--paper-2);
+  border-radius: 20px;
+  border: 2px solid var(--ink);
+}
+
+.event-expanded.show {
+  display: block;
+}
+
+.event-photos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.event-photo-item {
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s;
+  aspect-ratio: 4/3;
+}
+
+.event-photo-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.event-photo-item:hover {
+  transform: scale(1.02);
+  border-color: var(--saffron-deep);
+}
+
+.event-expand-close {
+  text-align: right;
+  margin-bottom: 15px;
+}
+
+.close-event-btn {
+  background: var(--blood);
+  color: white;
+  border: none;
+  padding: 6px 18px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 11px;
+}
+
+/* Event Gallery Cards */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 30px;
+  margin: 40px 0;
+}
+
+.event-card {
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.event-card:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0 var(--ink);
+}
+
+.event-card-image {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  display: block;
+}
+
+.event-card-overlay {
+  padding: 20px;
+  background: linear-gradient(135deg, var(--ink) 0%, #2a1a0a 100%);
+  color: white;
+  text-align: center;
+}
+
+.event-card-title {
+  font-family: var(--display);
+  font-size: 20px;
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+}
+
+.event-card-date {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--saffron-2);
+  margin-bottom: 12px;
+}
+
+.event-card-btn {
+  display: inline-block;
+  font-family: var(--condensed);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  background: var(--saffron-deep);
+  padding: 6px 16px;
+  border-radius: 30px;
+  color: white;
+  margin-top: 8px;
+}
+
+/* Expanded Event Content */
+.event-expanded {
+  display: none;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  padding: 25px;
+  background: var(--paper-2);
+  border-radius: 20px;
+  border: 2px solid var(--ink);
+  animation: fadeIn 0.3s ease;
+}
+
+.event-expanded.show {
+  display: block;
+}
+.event-photos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.event-photo-item {
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s;
+  aspect-ratio: 4/3;
+}
+
+.event-photo-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.event-photo-item:hover {
+  transform: scale(1.02);
+  border-color: var(--saffron-deep);
+}
+
+.event-expand-close {
+  text-align: right;
+  margin-bottom: 15px;
+}
+
+.close-event-btn {
+  background: var(--blood);
+  color: white;
+  border: none;
+  padding: 6px 18px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 11px;
+}
+
+/* Lightbox Styles */
+.photo-lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.photo-lightbox.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.lightbox-content {
+  max-width: 90%;
+  max-height: 85%;
+  text-align: center;
+  animation: zoomIn 0.3s ease;
+}
+
+.lightbox-content img {
+  max-width: 100%;
+  max-height: 70vh;
+  border-radius: 20px;
+  border: 4px solid var(--saffron-deep);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.lightbox-name {
+  font-family: 'Bowlby One', sans-serif;
+  font-size: 28px;
+  color: white;
+  margin-top: 20px;
+  letter-spacing: 0.02em;
+}
+
+.lightbox-role {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--saffron-2);
+  margin-top: 8px;
+  letter-spacing: 0.1em;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  font-size: 50px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--display);
+}
+
+.lightbox-close:hover {
+  transform: scale(1.1);
+  color: var(--saffron-deep);
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Make all photos show zoom cursor */
+.team-img, .head-photo, .member-photo-small {
+  cursor: zoom-in;
+  transition: transform 0.2s;
+}
+
+.team-img:hover, .head-photo:hover, .member-photo-small:hover {
+  transform: scale(1.02);
+}
+
+/* Make all team photos have a zoom cursor */
+.head-photo, .member-photo-small, .team-img {
+  cursor: zoom-in;
+  transition: transform 0.2s;
+}
+
+.head-photo:hover, .member-photo-small:hover, .team-img:hover {
+  transform: scale(1.02);
+}
+
+    /* Expanded Content Container */
+#expandedDeptContainer {
+  margin-top: 20px;
+}
+
+.dept-expanded {
+  display: none;
+}
+
+.dept-expanded.show {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Head Bio Expanded */
+.head-bio-expanded {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background: var(--paper-2);
+  border-radius: 20px;
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+.head-bio-expanded.show {
+  max-height: 200px;
+  padding: 20px 25px;
+}
+
+.head-bio-expanded p {
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Member Bio Expanded */
+.member-bio-expanded {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background: var(--paper-2);
+  border-radius: 16px;
+  margin-top: 12px;
+  text-align: left;
+}
+
+.member-bio-expanded.show {
+  max-height: 150px;
+  padding: 12px;
+}
+
+.member-bio-expanded p {
+  color: var(--ink-2);
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Arrows */
+.click-arrow, .member-arrow {
+  transition: transform 0.3s ease;
+}
+
+.click-arrow.rotated, .member-arrow.rotated {
+  transform: rotate(180deg);
+}
+
+/* ========== CLICKABLE HEAD & MEMBER CARDS ========== */
+
+/* Head Card - Clickable */
+.head-card-large {
+  background: white;
+  border-radius: 24px;
+  padding: 25px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+}
+
+.head-card-large:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+  border-color: var(--saffron-deep);
+}
+
+.head-photo {
+  width: 140px;
+  height: 140px;
+  border-radius: 20px;
+  object-fit: cover;
+  border: 3px solid var(--saffron-deep);
+  flex-shrink: 0;
+}
+
+.head-details {
+  flex: 1;
+}
+
+.head-details h4 {
+  font-family: 'Bowlby One', sans-serif;
+  font-weight: 400;
+  font-size: 28px;
+  margin-bottom: 8px;
+  color: var(--ink-dark);
+}
+
+.head-role-badge {
+  display: inline-block;
+  background: rgba(224,101,30,0.12);
+  color: var(--saffron-deep);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--mono);
+  padding: 5px 14px;
+  border-radius: 30px;
+  margin: 8px 0 0;
+  letter-spacing: 0.05em;
+}
+
+/* Arrow indicator for clickable */
+.click-arrow {
+  font-size: 24px;
+  color: var(--saffron-deep);
+  transition: transform 0.3s ease;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.click-arrow.rotated {
+  transform: rotate(180deg);
+}
+
+/* Expanded Bio Section */
+.head-bio-expanded {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background: var(--paper-2);
+  border-radius: 20px;
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+.head-bio-expanded.show {
+  max-height: 300px;
+  padding: 20px 25px;
+  margin-top: -5px;
+}
+
+.head-bio-expanded p {
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Member Card - Clickable */
+.member-card-small {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  position: relative;
+}
+
+.member-card-small:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  border-color: var(--saffron-deep);
+}
+
+.member-photo-small {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 12px;
+  border: 2px solid var(--saffron-deep);
+  display: block;
+}
+
+.member-name-small {
+  font-family: 'Bowlby One', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  margin-bottom: 5px;
+  color: var(--ink-dark);
+}
+
+.member-role-small {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--saffron-deep);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+.member-arrow {
+  position: absolute;
+  bottom: 10px;
+  right: 12px;
+  font-size: 14px;
+  color: var(--saffron-deep);
+  transition: transform 0.3s ease;
+}
+
+.member-arrow.rotated {
+  transform: rotate(180deg);
+}
+
+/* Member Expanded Bio */
+.member-bio-expanded {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background: var(--paper-2);
+  border-radius: 16px;
+  margin-top: 12px;
+  text-align: left;
+}
+
+.member-bio-expanded.show {
+  max-height: 150px;
+  padding: 15px;
+}
+
+.member-bio-expanded p {
+  color: var(--ink-2);
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Team Members Grid */
+.members-flex-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 25px;
+  margin-top: 10px;
+}
+
+.team-subtitle {
+  font-family: 'Bowlby One', sans-serif;
+  font-weight: 400;
+  font-size: 22px;
+  margin: 20px 0 20px;
+  padding-bottom: 10px;
+  border-bottom: 3px solid var(--saffron-deep);
+  display: inline-block;
+  color: var(--ink-dark);
+}
+    /* ========== BOLD DEPARTMENT CARDS ========== */
+.departments-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 35px;
+  margin: 40px 0;
+}
+
+.dept-click-card {
+  background: var(--earth-brown);
+  background: linear-gradient(145deg, #5C4033 0%, #3A2A1C 100%);
+  border-radius: 20px;
+  padding: 40px 20px 35px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: center;
+  box-shadow: 0 12px 0 #1A1108;
+  border: none;
+}
+
+.dept-click-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 0 #1A1108;
+}
+
+.dept-click-card h3 {
+  font-family: 'Bowlby One', 'Impact', sans-serif;
+  font-weight: 400;
+  font-size: 28px;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  color: white;
+  margin: 0 0 20px 0;
+  text-transform: uppercase;
+}
+
+.dept-head-name {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  color: #F4EBD7;
+  margin: 0 0 6px 0;
+}
+
+.dept-head-role {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: #D4A343;
+  text-transform: uppercase;
+}
+
+/* Expanded Content */
+.dept-expanded {
+  margin-top: 30px;
+  padding: 30px;
+  background: var(--paper-2);
+  border-radius: 20px;
+  display: none;
+  animation: fadeIn 0.3s ease;
+  border: 1px solid rgba(92,64,51,0.15);
+}
+
+.dept-expanded.show {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* Head Card - Left Photo + Right Text (Large Format) */
+.head-card-large {
+  background: white;
+  border-radius: 28px;
+  padding: 45px;           /* ← INCREASED (more space inside) */
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  gap: 40px;              /* ← INCREASED (more space between photo and text) */
+  transition: all 0.2s;
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+.head-card-large:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+.head-photo {
+  width: 250px;           /* ← INCREASED */
+  height: 250px;          /* ← INCREASED */
+  border-radius: 24px;    /* ← Slightly more rounded */
+  object-fit: cover;
+  border: 4px solid var(--saffron-deep);  /* ← Thicker border */
+  flex-shrink: 0;
+}
+
+.head-details {
+  flex: 1;
+}
+
+.head-details h4 {
+  font-family: 'Bowlby One', sans-serif;
+  font-weight: 400;
+  font-size: 40px;        /* ← INCREASED (bigger name) */
+  margin-bottom: 10px;
+  color: var(--ink-dark);
+}
+
+.head-role-badge {
+  display: inline-block;
+  background: rgba(224,101,30,0.12);
+  color: var(--saffron-deep);
+  font-size: 20px;        /* ← INCREASED */
+  font-weight: 600;
+  font-family: var(--mono);
+  padding: 6px 16px;
+  border-radius: 30px;
+  margin: 10px 0 14px;
+}
+
+.head-bio {
+  color: var(--ink-2);
+  font-size: 20px;        /* ← INCREASED */
+  line-height: 1.6;
+  max-width: 550px;
+}
+/* Team Members Grid */
+.members-flex-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 25px;
+  margin-top: 10px;
+}
+
+.member-card-small {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.2s;
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+.member-card-small:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.member-photo-small {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 12px;
+  border: 2px solid var(--saffron-deep);
+  display: block;
+}
+
+.member-name-small {
+  font-family: 'Bowlby One', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  margin-bottom: 5px;
+  color: var(--ink-dark);
+}
+
+.member-role-small {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--saffron-deep);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+/* Section Title */
+.team-subtitle {
+  font-family: 'Bowlby One', sans-serif;
+  font-weight: 400;
+  font-size: 22px;
+  margin: 20px 0 20px;
+  padding-bottom: 10px;
+  border-bottom: 3px solid var(--saffron-deep);
+  display: inline-block;
+  color: var(--ink-dark);
+  letter-spacing: 0.02em;
+}
+
+/* Team Members Grid - Same size */
+.members-flex-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 25px;
+}
+
+.member-card-small {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.2s;
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+.member-card-small:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.member-photo-small {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 12px;
+  border: 2px solid var(--saffron-deep);
+  display: block;
+}
+
+.member-name-small {
+  font-family: 'Bowlby One', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  margin-bottom: 5px;
+  color: var(--ink-dark);
+}
+
+.member-role-small {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--saffron-deep);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+/* Team Members Grid */
+.team-subtitle {
+  font-family: 'Bowlby One', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  margin: 25px 0 18px;
+  padding-bottom: 8px;
+  border-bottom: 3px solid var(--saffron-deep);
+  display: inline-block;
+  color: var(--ink-dark);
+}
+
+.members-flex-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 20px;
+}
+
+.member-card-small {
+  background: white;
+  border-radius: 16px;
+  padding: 18px;
+  text-align: center;
+  transition: all 0.2s;
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+.member-card-small:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.member-photo-small {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 12px;
+  border: 2px solid var(--saffron-deep);
+}
+
+.member-name-small {
+  font-family: 'Bowlby One', sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  margin-bottom: 5px;
+  color: var(--ink-dark);
+}
+
+.member-role-small {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--saffron-deep);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+    /* Team Gallery Grid Fix */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.gallery-item {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.2s;
+  box-shadow: 5px 5px 0 var(--ink);
+}
+
+.gallery-item:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 8px 8px 0 var(--ink);
+}
+/* ========== COLOR SYSTEM ========== */
+:root {
+  --saffron: #E0651E;
+  --saffron-2: #F0823A;
+  --saffron-deep: #E0651E;
+  --saffron-deep2: #0B6623;
+  --green: #C9A227;
+  --green-2: #C9A227;
+  --ink: #1A1108;
+  --ink-2: #3A2A1C;
+  --ink-3: #6A5440;
+  --paper: #F4EBD7;
+  --paper-2: #EADFC4;
+  --paper-3: #DBCBA5;
+  --blood: #8B1A1A;
+  --gold: #C9A227;
+  --display: 'Bowlby One', 'Impact', sans-serif;
+  --condensed: 'Oswald', 'Arial Narrow', sans-serif;
+  --sans: 'Inter', -apple-system, system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --max: 1280px;
+  --gutter: 56px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* AIOU Background Watermark */
+body {
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: 'AIOU';
+  position: fixed;
+  bottom: -80px;
+  right: -40px;
+  font-family: var(--display);
+  font-size: 320px;
+  color: var(--ink);
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  position: relative;
+  z-index: 1;
+}
+
+.display {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(44px, 6vw, 80px);
+  line-height: 0.92;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+}
+
+.display em {
+  font-style: italic;
+  font-family: 'Georgia', serif;
+  font-weight: 400;
+  color: var(--saffron);
+  letter-spacing: -0.01em;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--saffron-deep);
+  margin-bottom: 22px;
+}
+
+.lead {
+  font-family: var(--sans);
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  max-width: 560px;
+  margin-top: 24px;
+}
+.lead.on-dark { color: rgba(244,235,215,0.78); }
+.top-strip {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 9px 0;
+  overflow: hidden;
+  border-bottom: 2px solid var(--saffron);
+}
+/* Top Strip */
+.top-strip {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 9px 0;
+  overflow: hidden;
+  border-bottom: 2px solid var(--saffron);
+}
+
+.ticker {
+  display: flex;
+  gap: 56px;
+  white-space: nowrap;
+  width: max-content;
+  animation: ticker 40s linear infinite;
+}
+
+.ticker span::before {
+  content: '✦';
+  margin-right: 12px;
+  color: var(--saffron-2);
+}
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Marquee (Slogan Banner) */
+.marquee {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 24px 0;
+  overflow: hidden;
+  border-top: 4px solid var(--saffron);
+  border-bottom: 4px solid var(--green);
+}
+
+.marquee-track {
+  display: flex;
+  gap: 48px;
+  white-space: nowrap;
+  width: max-content;
+  animation: marqueeScroll 32s linear infinite;
+  font-family: var(--display);
+  font-size: 32px;
+  letter-spacing: 0.015em;
+}
+
+.marquee-track span:nth-child(odd) { color: var(--saffron-2); }
+.marquee-track .dot { color: var(--green-2); font-size: 22px; }
+
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Navigation */
+.nav {
+  background: rgba(244,235,215,0.94);
+  backdrop-filter: blur(8px);
+  border-bottom: 2px solid var(--ink);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 16px var(--gutter);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 40px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+}
+
+.brand-logo {
+  width: 55px;
+  height: 55px;
+  background: var(--saffron-deep);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.brand-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.brand-name {
+  font-family: var(--display);
+  font-size: 16px;
+  letter-spacing: 0.01em;
+  line-height: 0.94;
+  color: var(--ink);
+}
+
+.brand-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--saffron-deep);
+}
+
+.primary-nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 36px;
+}
+
+.primary-nav a {
+  font-family: var(--condensed);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink);
+  padding: 6px 0;
+  position: relative;
+}
+
+.primary-nav a::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  background: var(--saffron);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s;
+}
+
+.primary-nav a:hover { color: var(--saffron-deep); }
+.primary-nav a:hover::after { transform: scaleX(1); }
+
+.btn-pill {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--condensed);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 12px 22px;
+  border: 2px solid var(--ink);
+  transition: all 0.18s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-pill:hover {
+  background: var(--saffron-deep);
+  border-color: var(--saffron-deep);
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  border-bottom: 3px solid var(--ink);
+  padding: 60px 0;
+  background: radial-gradient(ellipse 60% 50% at 85% 15%, rgba(224,101,30,0.08), transparent 60%);
+}
+
+.hero-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  display: grid;
+  grid-template-columns: 1.15fr 0.95fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.hero-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(48px, 8vw, 118px);
+  line-height: 0.86;
+  letter-spacing: -0.015em;
+  margin-bottom: 28px;
+  color: var(--ink);
+}
+
+.hero-title .t-saffron { color: var(--saffron-deep2); }
+.hero-title .t-green { color: var(--green); }
+.hero-title .t-italic {
+  font-family: 'Georgia', serif;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.hero-sub {
+  font-family: var(--sans);
+  font-size: 19px;
+  line-height: 1.55;
+  max-width: 520px;
+  margin-bottom: 38px;
+  color: var(--ink-2);
+}
+
+.hero-ctas {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 56px;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background: var(--saffron-deep);
+  color: var(--paper);
+  font-family: var(--condensed);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 18px 32px;
+  border: 2px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  transform: translate(3px, 3px);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.btn-link {
+  font-family: var(--condensed);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 6px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.btn-link:hover { color: var(--saffron-deep); border-color: var(--saffron-deep); }
+
+.hero-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid rgba(26,17,8,0.2);
+  padding-top: 22px;
+}
+
+.hero-strip strong {
+  font-family: var(--display);
+  font-size: 36px;
+  font-weight: 400;
+  color: var(--ink);
+  display: block;
+}
+
+.hero-strip span {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.poster-frame {
+  background: var(--paper-2);
+  border: 3px solid var(--ink);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 12px 12px 0 var(--ink);
+}
+
+/* Vision */
+.vision {
+  padding: 110px 0;
+  border-bottom: 2px solid var(--ink);
+  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+}
+
+.vision-grid {
+  display: grid;
+  grid-template-columns: 1fr 0.85fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.mission-card {
+  margin-top: 40px;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  padding: 28px 30px;
+  position: relative;
+  box-shadow: 8px 8px 0 var(--ink);
+  transition: all 0.2s;
+}
+
+.mission-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 10px 10px 0 var(--ink);
+}
+
+.mc-label {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--green);
+  background: var(--paper-2);
+  padding: 4px 10px;
+  border: 1px solid var(--green);
+  margin-bottom: 16px;
+}
+
+/* Manifesto with Hover Effects */
+.manifesto {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 120px 0;
+  position: relative;
+  border-bottom: 2px solid var(--ink);
+  overflow: hidden;
+}
+
+.manifesto::before {
+  content: '';
+  position: absolute;
+  top: -200px; left: -200px;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, var(--saffron-deep), transparent 70%);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.manifesto::after {
+  content: '';
+  position: absolute;
+  bottom: -200px; right: -200px;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, var(--green), transparent 70%);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.section-head {
+  text-align: center;
+  margin-bottom: 72px;
+  position: relative;
+  z-index: 2;
+}
+.section-head .lead { margin: 24px auto 0; }
+.demands {
+  list-style: none;
+  display: grid;
+  gap: 0;
+  max-width: 980px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid rgba(244,235,215,0.18);
+}
+
+.demands {
+  list-style: none;
+  display: grid;
+  gap: 0;
+  max-width: 980px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid rgba(244,235,215,0.18);
+}
+
+.demand {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 36px;
+  padding: 36px 0;
+  border-bottom: 1px solid rgba(244,235,215,0.18);
+  align-items: start;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.demand:hover {
+  padding-left: 20px;
+  padding-right: 20px;
+  background: rgba(224,101,30,0.12);
+  transform: scale(1.01);
+}
+
+.d-num {
+  font-family: var(--display);
+  font-size: 88px;
+  line-height: 0.85;
+  color: var(--saffron-2);
+  transition: all 0.25s;
+}
+
+.demand:hover .d-num {
+  transform: translateX(8px);
+  color: var(--saffron-2);
+}
+
+.d-text {
+  font-family: var(--sans);
+  font-size: 21px;
+  line-height: 1.5;
+  color: rgba(244,235,215,0.92);
+  font-weight: 400;
+  padding-top: 16px;
+}
+
+.d-text strong {
+  color: var(--paper);
+  font-weight: 700;
+  background: linear-gradient(180deg, transparent 62%, rgba(224,101,30,0.45) 62%);
+  padding: 0 2px;
+}
+
+/* Eligibility Section */
+.eligibility {
+  padding: 120px 0;
+  background: var(--paper);
+  border-bottom: 2px solid var(--ink);
+}
+
+.elig-head {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 64px;
+}
+.elig-head .lead { margin: 24px auto 0; }
+.checklist {
+  list-style: none;
+  display: grid;
+  gap: 16px;
+  max-width: 920px;
+  margin: 0 auto;
+}
+.checklist li {
+  display: grid;
+  grid-template-columns: 140px 1fr 64px;
+  grid-template-areas:
+    "num title tick"
+    "num sub   tick";
+  align-items: center;
+  gap: 4px 28px;
+  padding: 22px 28px;
+  background: var(--paper-2);
+  border: 2px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--ink);
+  transition: all 0.2s;
+  }
+
+.checklist li:hover {
+  background: var(--paper-3);
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0 var(--ink);
+}
+
+.ck-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--saffron-deep);
+  font-weight: 600;
+}
+
+.ck-title {
+  font-family: var(--display);
+  font-size: 28px;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+  line-height: 1;
+}
+
+.ck-sub {
+  font-family: var(--sans);
+  font-size: 14.5px;
+  font-style: italic;
+  color: var(--ink-2);
+  margin-top: 6px;
+}
+
+.ck-tick {
+  width: 48px; height: 48px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  color: var(--green);
+  background: var(--paper);
+  transition: all 0.2s;
+}
+
+.checklist li:hover .ck-tick {
+  background: var(--green);
+  color: var(--paper);
+}
+
+/* Team Section */
+.team-section {
+  padding: 100px 0;
+  border-bottom: 2px solid var(--ink);
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.team-card {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.2s;
+  box-shadow: 5px 5px 0 var(--ink);
+}
+
+.team-card:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 8px 8px 0 var(--ink);
+}
+
+.team-img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  background: var(--paper-3);
+  border-bottom: 2px solid var(--ink);
+}
+
+.team-info {
+  padding: 20px;
+}
+
+.team-name {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+
+.team-role {
+  color: var(--saffron-deep);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.team-bio {
+  font-size: 13px;
+  color: var(--ink-2);
+  margin: 8px 0;
+}
+
+/* Gallery */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.gallery-item {
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  aspect-ratio: 4/3;
+  box-shadow: 4px 4px 0 var(--ink);
+  transition: all 0.2s;
+}
+
+.gallery-item:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.2s;
+}
+
+.lightbox.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.lightbox img {
+  max-width: 90%;
+  max-height: 85%;
+  border-radius: 12px;
+  border: 3px solid var(--paper);
+}
+
+.close-lightbox {
+  position: absolute;
+  top: 24px;
+  right: 32px;
+  color: var(--paper);
+  font-size: 48px;
+  cursor: pointer;
+  font-family: var(--display);
+}
+
+/* Rules Card */
+.rules-card {
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 24px;
+  padding: 48px;
+  text-align: center;
+  box-shadow: 10px 10px 0 var(--ink);
+}
+
+.btn-download {
+  background: var(--blood);
+  color: var(--paper);
+  font-family: var(--condensed);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 16px 32px;
+  border: 2px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--ink);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  transition: all 0.2s;
+}
+
+.btn-download:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 3px 3px 0 var(--ink);
+  background: var(--saffron-deep);
+}
+
+/* Google Form Section */
+.google-form-section {
+  padding: 100px 0;
+  background: var(--paper-2);
+  border-bottom: 2px solid var(--ink);
+}
+
+.form-container {
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 12px 12px 0 var(--ink);
+}
+
+/* Contact */
+.contact {
+  padding: 100px 0;
+  background: var(--paper);
+  border-bottom: 2px solid var(--ink);
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.contact-meta {
+  list-style: none;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.contact-meta li {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(26,17,8,0.15);
+}
+
+.cm-label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* Join Banner */
+.join-banner {
+  border-bottom: 2px solid var(--ink);
+  background: var(--paper);
+}
+
+.join-banner img {
+  width: 100%;
+  display: block;
+}
+
+/* Footer */
+.footer {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 60px 0 30px;
+}
+
+.footer a {
+  color: rgba(244,235,215,0.72);
+  text-decoration: none;
+}
+
+.footer a:hover { color: var(--saffron-2); }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  :root { --gutter: 32px; }
+  .primary-nav { display: none; }
+  .nav-inner { grid-template-columns: 1fr auto; gap: 16px; }
+  .hero-inner { grid-template-columns: 1fr; gap: 56px; }
+  .vision-grid, .contact-grid { grid-template-columns: 1fr; gap: 56px; }
+  .vision, .manifesto, .eligibility, .founder, .contact { padding: 80px 0; }
+  .hero-strip { grid-template-columns: repeat(2, 1fr); row-gap: 18px; }
+  .demand { grid-template-columns: 90px 1fr; gap: 24px; }
+  .d-num { font-size: 60px; }
+  .checklist li { grid-template-columns: 110px 1fr 50px; }
+  .ck-title { font-size: 24px; }
+}
+
+@media (max-width: 640px) {
+  :root { --gutter: 20px; }
+  .hero-title { font-size: 52px; }
+  .hero-strip strong { font-size: 28px; }
+  .team-grid { grid-template-columns: 1fr; }
+  .demand { grid-template-columns: 70px 1fr; gap: 18px; }
+  .d-num { font-size: 44px; }
+  .d-text { font-size: 16.5px; }
+    .checklist li {
+    grid-template-columns: 1fr 50px;
+    grid-template-areas:
+      "num tick"
+      "title tick"
+      "sub tick";
+    padding: 18px 20px;
+    gap: 4px 16px;
+  }
+  .ck-title { font-size: 22px; }
+  .marquee-track { font-size: 20px; }
+}
+
+/* FORCE HORIZONTAL GRID FOR EVENT PHOTOS */
+.event-photos-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 15px !important;
+  margin-top: 20px !important;
+}
+
+.event-photo-item {
+  display: block !important;
+  width: 100% !important;
+}
+
+/* On tablet: 2 columns */
+@media (max-width: 768px) {
+  .event-photos-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* On mobile: 1 column */
+@media (max-width: 480px) {
+  .event-photos-grid {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<!-- TOP TICKER -->
+<div class="top-strip">
+  <div class="ticker">
+    <span>The Computing Society (AIOU) · </span>
+    <span>Filed under: Innovation & Student Community</span>
+    <span>Powered by students. Supported by collaboration.</span>
+    <span>HQ: Department of Computer Science, AIOU</span>
+    <span>Now accepting ideas, creators, and collaborators</span>
+    <span>Official Website</span>
+  </div>
+</div>
+
+<!-- NAVIGATION -->
+<header class="nav">
+  <div class="nav-inner">
+    <a href="#" class="brand">
+      <span class="brand-logo">
+        <img src="SocietyLogo.png" alt="Computing Society AIOU" onerror="this.style.display='none'; this.parentElement.innerHTML='CS'">
+      </span>
+      <span class="brand-text">
+        <span class="brand-name">The Computing <br>Society (AIOU)</span>
+        <span class="brand-tag">Technology • Community • Leadership</span>
+      </span>
+    </a>
+    <nav class="primary-nav">
+      <ul>
+        <li><a href="#vision">Vision</a></li>
+        <li><a href="#manifesto">Manifesto</a></li>
+        <li><a href="#team">Team</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+   <a href="https://docs.google.com/forms/d/e/1FAIpQLSfGg3K_VvbNkRYcdhxia5oQkE7ySeqzpMGtgERIst5-ZivZbg/viewform" target="_blank" class="btn-pill">Join The Society →</a>
+  </div>
+</header>
+<!-- HERO SECTION - CONTAINED & MOBILE FRIENDLY -->
+<section class="hero" style="padding: 40px 0 80px 0; background: radial-gradient(ellipse 60% 50% at 85% 15%, rgba(224,101,30,0.08), transparent 60%);">
+  <div class="hero-inner" style="max-width: 1400px; margin: 0 auto; padding: 0 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;">
+    
+    <!-- LEFT TEXT -->
+    <div class="hero-text">
+      <div style="display: inline-flex; align-items: center; gap: 10px; margin-bottom: 24px;">
+        <span style="width: 7px; height: 7px; border-radius: 50%; background: var(--blood); animation: pulse 1.6s infinite;"></span>
+        <span style="font-family: var(--mono); font-size: 12px; letter-spacing: 0.22em;">The Computing Society · Live & Growing</span>
+      </div>
+      <h1 class="hero-title" style="font-family: var(--display); font-weight: 400; font-size: clamp(48px, 8vw, 130px); line-height: 0.86; margin-bottom: 28px;">
+        THE<br>
+        <span style="color: var(--saffron-deep);">Computing Society</span><br>
+        <span style="color: var(--green); font-family: 'Georgia', serif; font-style: italic;">(AIOU).</span>
+      </h1>
+      <p style="font-family: var(--sans); font-size: 18px; line-height: 1.55; max-width: 580px; margin-bottom: 38px; color: var(--ink-2);">
+        A student led tech community at AIOU where creativity meets code, collaboration drives growth, and 
+        students shape the future through innovation, events, and hands-on experiences.
+      </p>
+      <div style="display: flex; align-items: center; gap: 24px; margin-bottom: 48px; flex-wrap: wrap;">
+        <a href="#contact" style="background: var(--saffron-deep); color: var(--paper); font-family: var(--condensed); font-size: 14px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; padding: 16px 36px; border: 2px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); display: inline-flex; align-items: center; gap: 12px; text-decoration: none;">Join The Society Now! →</a>
+        <a href="#manifesto" style="font-family: var(--condensed); font-size: 14px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink); border-bottom: 2px solid var(--ink); padding-bottom: 6px; text-decoration: none;">Read the Manifesto</a>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid rgba(26,17,8,0.2); padding-top: 24px; gap: 16px;">
+        <div><strong style="font-family: var(--display); font-size: 36px; font-weight: 400;">100+</strong><br><span style="font-family: var(--mono); font-size: 10px;">Students</span></div>
+        <div><strong style="font-family: var(--display); font-size: 36px; font-weight: 400;">20+</strong><br><span style="font-family: var(--mono); font-size: 10px;">Events</span></div>
+        <div><strong style="font-family: var(--display); font-size: 36px; font-weight: 400;">10+</strong><br><span style="font-family: var(--mono); font-size: 10px;">Workshops</span></div>
+        <div><strong style="font-family: var(--display); font-size: 36px; font-weight: 400;">∞</strong><br><span style="font-family: var(--mono); font-size: 10px;">Opportunities</span></div>
+      </div>
+    </div>
+    
+    <!-- RIGHT POSTER -->
+    <div class="hero-poster" style="max-width: 600px; margin: 0 auto;">
+      <div class="poster-frame" style="background: var(--paper-2); border: 4px solid var(--ink); border-radius: 24px; overflow: hidden; box-shadow: 12px 12px 0 var(--ink);">
+        <div style="background: var(--saffron-deep); color: var(--paper); padding: 14px 22px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.3em; display: flex; justify-content: space-between;">
+          <span>SNIPPETS</span>
+          <span>★ ★ ★</span>
+        </div>
+        
+        <div style="background: var(--ink); padding: 20px;">
+          <div style="position: relative; aspect-ratio: 16/9; overflow: hidden; border-radius: 20px; border: 3px solid var(--saffron);">
+            <img id="slideshowImg" style="width: 100%; height: 100%; object-fit: cover;" src="images/events/cisco-mou-ceremony/1.jpeg" alt="Gallery slideshow">
+            <button id="prevSlide" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 20px;">‹</button>
+            <button id="nextSlide" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 20px;">›</button>
+            <div style="position: absolute; bottom: 10px; left: 0; right: 0; display: flex; justify-content: center; gap: 8px;" id="slideDots"></div>
+          </div>
+          <p style="font-family: var(--mono); font-size: 10px; text-align: center; margin-top: 14px; color: var(--saffron-2); letter-spacing: 0.15em;">✦ EXPLORE GALLERY · 30+ MOMENTS ✦</p>
+        </div>
+        
+        <div style="background: var(--ink); padding: 20px 28px; text-align: center; border-top: 2px solid var(--saffron-deep);">
+          <p style="font-family: var(--mono); font-size: 10px; letter-spacing: 0.3em; color: var(--saffron-2); margin-bottom: 8px;">Together · Resilient · Unstoppable</p>
+          <p style="font-family: var(--display); font-size: 24px; color: var(--paper); letter-spacing: 0.02em;">"Code. Connect. Create."</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<script>
+// BIG SLIDESHOW WITH ARROWS
+(function() {
+  const slideshowImages = [
+    "images/events/cisco-mou-ceremony/1.jpeg",
+    "images/events/cisco-mou-ceremony/2.jpeg",
+    "images/events/aiou-fest/1.jpeg",
+    "images/events/aiou-fest/3.jpeg",
+    "images/events/departmentofcs/1.jpeg",
+    "images/events/departmentofcs/3.jpeg",
+    "images/events/open-house/1.jpeg",
+    "images/events/computing-excellence/2.jpeg"
+  ];
+  
+  let currentSlide = 0;
+  const slideshowImg = document.getElementById('slideshowImg');
+  const dotsContainer = document.getElementById('slideDots');
+  const prevBtn = document.getElementById('prevSlide');
+  const nextBtn = document.getElementById('nextSlide');
+  
+  function updateSlide() {
+    if (slideshowImg) {
+      slideshowImg.style.opacity = '0.5';
+      setTimeout(() => {
+        slideshowImg.src = slideshowImages[currentSlide];
+        slideshowImg.style.opacity = '1';
+      }, 150);
+    }
+    if (dotsContainer) {
+      Array.from(dotsContainer.children).forEach((dot, idx) => {
+        dot.style.backgroundColor = idx === currentSlide ? 'var(--saffron-deep)' : 'rgba(244,235,215,0.4)';
+        dot.style.transform = idx === currentSlide ? 'scale(1.3)' : 'scale(1)';
+      });
+    }
+  }
+  
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % slideshowImages.length;
+    updateSlide();
+    resetTimer();
+  }
+  
+  function prevSlide() {
+    currentSlide = (currentSlide - 1 + slideshowImages.length) % slideshowImages.length;
+    updateSlide();
+    resetTimer();
+  }
+  
+  // Create dots
+  if (dotsContainer && slideshowImages.length) {
+    slideshowImages.forEach((_, index) => {
+      const dot = document.createElement('span');
+      dot.style.width = '10px';
+      dot.style.height = '10px';
+      dot.style.borderRadius = '50%';
+      dot.style.backgroundColor = index === 0 ? 'var(--saffron-deep)' : 'rgba(244,235,215,0.4)';
+      dot.style.cursor = 'pointer';
+      dot.style.transition = 'all 0.2s';
+      dot.addEventListener('click', () => {
+        currentSlide = index;
+        updateSlide();
+        resetTimer();
+      });
+      dotsContainer.appendChild(dot);
+    });
+  }
+  
+  if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+  if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+  
+  let slideInterval = setInterval(nextSlide, 4000);
+  
+  function resetTimer() {
+    clearInterval(slideInterval);
+    slideInterval = setInterval(nextSlide, 4000);
+  }
+  
+  if (slideshowImg) {
+    slideshowImg.onerror = function() {
+      this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'%3E%3Crect width='800' height='450' fill='%233A5C40'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%23D4A343' font-size='36'%3E📸 Computing Society%3C/text%3E%3C/svg%3E";
+    };
+  }
+})();
+</script>
+<script>
+// AUTO SLIDESHOW FOR POSTER GALLERY
+(function() {
+  // List of gallery images for slideshow
+  const slideshowImages = [
+    "images/events/cisco-mou-ceremony/1.jpeg",
+    "images/events/cisco-mou-ceremony/2.jpeg",
+    "images/events/aiou-fest/1.jpeg",
+    "images/events/aiou-fest/3.jpeg",
+    "images/events/departmentofcs/1.jpeg",
+    "images/events/departmentofcs/3.jpeg",
+    "images/events/open-house/1.jpeg",
+    "images/events/computing-excellence/2.jpeg"
+  ];
+  
+  let currentSlide = 0;
+  const slideshowImg = document.getElementById('slideshowImg');
+  const dotsContainer = document.getElementById('slideDots');
+  
+  // Create dots
+  if (dotsContainer) {
+    slideshowImages.forEach((_, index) => {
+      const dot = document.createElement('span');
+      dot.style.width = '8px';
+      dot.style.height = '8px';
+      dot.style.borderRadius = '50%';
+      dot.style.backgroundColor = index === 0 ? 'var(--saffron-deep)' : 'rgba(244,235,215,0.4)';
+      dot.style.cursor = 'pointer';
+      dot.style.transition = 'all 0.2s';
+      dot.addEventListener('click', () => {
+        currentSlide = index;
+        updateSlide();
+        resetTimer();
+      });
+      dotsContainer.appendChild(dot);
+    });
+  }
+  
+  function updateSlide() {
+    if (slideshowImg) {
+      slideshowImg.style.opacity = '0.5';
+      setTimeout(() => {
+        slideshowImg.src = slideshowImages[currentSlide];
+        slideshowImg.style.opacity = '1';
+      }, 150);
+    }
+    // Update dots
+    if (dotsContainer) {
+      Array.from(dotsContainer.children).forEach((dot, idx) => {
+        dot.style.backgroundColor = idx === currentSlide ? 'var(--saffron-deep)' : 'rgba(244,235,215,0.4)';
+        dot.style.transform = idx === currentSlide ? 'scale(1.2)' : 'scale(1)';
+      });
+    }
+  }
+  
+  let slideInterval = setInterval(() => {
+    currentSlide = (currentSlide + 1) % slideshowImages.length;
+    updateSlide();
+  }, 3500);
+  
+  function resetTimer() {
+    clearInterval(slideInterval);
+    slideInterval = setInterval(() => {
+      currentSlide = (currentSlide + 1) % slideshowImages.length;
+      updateSlide();
+    }, 3500);
+  }
+  
+  // Load fallback if images fail
+  if (slideshowImg) {
+    slideshowImg.onerror = function() {
+      this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 250'%3E%3Crect width='400' height='250' fill='%233A5C40'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%23D4A343'%3E📸 Gallery%3C/text%3E%3C/svg%3E";
+    };
+  }
+})();
+</script>
+<style>
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.65); }
+  }
+</style>
+<!-- ============ SLOGAN MARQUEE ============ -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span>Code. Connect. Create.</span><span class="dot">✦</span>
+    <span>Innovate. Collaborate. Elevate.</span><span class="dot">✦</span>
+    <span>Where Tech Meets Community.</span><span class="dot">✦</span>
+    <span>Learn. Build. Lead.</span><span class="dot">✦</span>
+    <span>Turning Ideas Into Impact.</span><span class="dot">✦</span>
+    <span>More Than Just Coding</span><span class="dot">✦</span>
+    <span>Built by Students. Driven by Innovation.</span><span class="dot">✦</span>
+    <span>Empowering the Next Generation of Innovators.</span><span class="dot">✦</span>
+  </div>
+</div>
+
+<!-- VISION SECTION -->
+<section class="vision" id="vision">
+  <div class="container">
+    <div class="vision-grid">
+      <div class="vision-side">
+        <span class="eyebrow">Chapter One</span>
+        <h2 class="display">Our Society's<br><em>Vision.</em></h2>
+        <p class="lead">
+          To build a dynamic student-led tech community at AIOU where innovation, collaboration, and creativity empower students to grow beyond the classroom and shape the future through technology and leadership.
+        </p>
+        <div class="mission-card">
+          <span class="mc-label">Our Mission</span>
+          <p>
+            The Computing Society AIOU is committed to empowering students by organizing technical, educational, and recreational initiatives including workshops, hackathons, competitions, community projects, networking sessions, and collaborative programs that promote learning, innovation, and leadership.
+          </p>
+        </div>
+      </div>
+      <!-- RIGHT SIDE - QUOTE POSTER -->
+<div class="vision-poster" style="max-width: 700px; margin: 0 auto;">
+  <div class="poster-frame" style="background: var(--paper-2); border: 4px solid var(--ink); border-radius: 28px; overflow: hidden; box-shadow: 16px 16px 0 var(--ink);">
+    <div style="background: var(--saffron-deep2); color: var(--paper); padding: 16px 24px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.28em; display: flex; justify-content: space-between;">
+      <span>OUR CREED</span>
+      <span>✦ ✦ ✦</span>
+    </div>
+    
+    <div style="background: var(--ink); padding: 48px 36px; text-align: center;">
+      <div style="font-family: 'Georgia', serif; font-size: 28px; color: var(--paper); line-height: 1.4; font-style: italic;">
+        "Technology is best when it brings people together."
+      </div>
+      <div style="margin-top: 24px;">
+        <div style="width: 50px; height: 2px; background: var(--saffron-deep2); margin: 0 auto;"></div>
+        <p style="font-family: var(--mono); font-size: 12px; color: var(--saffron-deep2); margin-top: 16px;">— Computing Society AIOU</p>
+      </div>
+    </div>
+    
+    <div style="background: var(--ink); padding: 24px 32px; text-align: center; border-top: 2px solid var(--saffron-deep2);">
+      <p style="font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; color: var(--saffron-deep);">CODE WITH PURPOSE · LEAD WITH HEART</p>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO with HOVER EFFECTS -->
+<section class="manifesto" id="manifesto">
+   <div class="container">
+    <header class="section-head">
+     <span class="eyebrow" style="color: var(--saffron-2);">Our Core Focus</span>
+      <h2 class="display" style="color: var(--paper);">The Manifesto.</h2>
+      <p class="lead on-dark">Read it once. Read it twice. Then send it to someone who needs to read it.</p>
+    </header>
+    <ol class="demands">
+      <li class="demand">
+        <span class="d-num">01</span>
+        <p class="d-text">Empowering students through <strong>technology, collaboration</strong> and real-world learning experiences.</p>
+      </li>
+      <li class="demand">
+        <span class="d-num">02</span>
+        <p class="d-text">Building a strong tech community <strong>where ideas grow into impactful projects.</strong></p>
+      </li>
+      <li class="demand">
+        <span class="d-num">03</span>
+        <p class="d-text"><strong>Encouraging</strong> creativity, teamwork, and problem-solving through events and activities.</p>
+      </li>
+      <li class="demand">
+        <span class="d-num">04</span>
+        <p class="d-text">Creating opportunities for students to <strong>learn, lead, and innovate beyond the classroom.</strong></p>
+      </li>
+      <li class="demand">
+        <span class="d-num">05</span>
+        <p class="d-text">Bridging the gap between <strong>academic learning and practical industry skills.</strong></p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- TEAM SECTION - GALLERY STYLE -->
+<section class="team-section" id="team">
+  <div class="container">
+    <span class="eyebrow">Leadership</span>
+    <h2 class="display">Our Current <em>Team</em></h2>
+    <p class="lead" style="max-width: 700px;">Meet the passionate students driving the society forward.</p>
+
+    <!-- EXECUTIVE TEAM -->
+    <h3 style="font-family: var(--display); font-size: 32px; margin: 48px 0 24px;">Executive Body</h3>
+    <div class="gallery-grid" style="margin-bottom: 60px;">
+      
+      <!-- President - Hammad Raza -->
+      <div class="gallery-item" style="aspect-ratio: auto; background: var(--paper);">
+        <div style="padding: 0;">
+          <img src="images/hammad_raza.jpeg" alt="Hammad Raza" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-bottom: 2px solid var(--ink);" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Crect width=%27200%27 height=%27200%27 fill=%27%23D4C5B2%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 dy=%27.3em%27 fill=%27%235C4033%27 font-size=%2716%27%3EPresident%3C/text%3E%3C/svg%3E'">
+          <div style="padding: 15px;">
+            <div style="font-family: var(--display); font-size: 18px; margin-bottom: 4px;">Muhamamd Hammad Raza</div>
+            <div style="color: var(--saffron-deep); font-family: var(--mono); font-size: 11px; margin-bottom: 8px;">President</div>
+            <div style="font-size: 13px; color: var(--ink-2);">Leading the society with vision and dedication.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vice President - Usman Mustafa -->
+      <div class="gallery-item" style="aspect-ratio: auto; background: var(--paper);">
+        <div style="padding: 0;">
+          <img src="images/usman_mustafa.jpeg" alt="Usman Mustafa" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-bottom: 2px solid var(--ink);" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Crect width=%27200%27 height=%27200%27 fill=%27%23D4C5B2%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 dy=%27.3em%27 fill=%27%235C4033%27 font-size=%2716%27%3EVP%3C/text%3E%3C/svg%3E'">
+          <div style="padding: 15px;">
+            <div style="font-family: var(--display); font-size: 18px;">Usman Mustafa</div>
+            <div style="color: var(--saffron-deep); font-family: var(--mono); font-size: 11px;">Vice President</div>
+            <div style="font-size: 13px; color: var(--ink-2);">Supporting society operations and strategic planning.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Secretary - Ilham Rafiq -->
+      <div class="gallery-item" style="aspect-ratio: auto; background: var(--paper);">
+        <div style="padding: 0;">
+          <img src="images/ilham_rafiq.jpeg" alt="Ilham Rafiq" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-bottom: 2px solid var(--ink);" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Crect width=%27200%27 height=%27200%27 fill=%27%23D4C5B2%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 dy=%27.3em%27 fill=%27%235C4033%27 font-size=%2716%27%3ESecretary%3C/text%3E%3C/svg%3E'">
+          <div style="padding: 15px;">
+            <div style="font-family: var(--display); font-size: 18px;">Ilham Rafiq</div>
+            <div style="color: var(--saffron-deep); font-family: var(--mono); font-size: 11px;">Secretary</div>
+            <div style="font-size: 13px; color: var(--ink-2);">Managing documentation and official communications.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- General Secretary - Nimra Faraz -->
+      <div class="gallery-item" style="aspect-ratio: auto; background: var(--paper);">
+        <div style="padding: 0;">
+          <img src="images/nimra_faraz.jpeg" alt="Nimra Faraz" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-bottom: 2px solid var(--ink);" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Crect width=%27200%27 height=%27200%27 fill=%27%23D4C5B2%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 dy=%27.3em%27 fill=%27%235C4033%27 font-size=%2716%27%3EGS%3C/text%3E%3C/svg%3E'">
+          <div style="padding: 15px;">
+            <div style="font-family: var(--display); font-size: 18px;">Nimra Faraz</div>
+            <div style="color: var(--saffron-deep); font-family: var(--mono); font-size: 11px;">General Secretary</div>
+            <div style="font-size: 13px; color: var(--ink-2);">Overseeing all society operations and member coordination.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HR Manager - Ahmad Aizaz -->
+      <div class="gallery-item" style="aspect-ratio: auto; background: var(--paper);">
+        <div style="padding: 0;">
+          <img src="images/ahmad_aizaz.jpeg" alt="Ahmad Aizaz" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-bottom: 2px solid var(--ink);" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 200%27%3E%3Crect width=%27200%27 height=%27200%27 fill=%27%23D4C5B2%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 dy=%27.3em%27 fill=%27%235C4033%27 font-size=%2716%27%3EHR%3C/text%3E%3C/svg%3E'">
+          <div style="padding: 15px;">
+            <div style="font-family: var(--display); font-size: 18px;">Ahmad Aizaz</div>
+            <div style="color: var(--saffron-deep); font-family: var(--mono); font-size: 11px;">HR Manager</div>
+            <div style="font-size: 13px; color: var(--ink-2);">Managing member relations and team building.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- DEPARTMENT TEAMS - BOLD BROWN CARDS -->
+<h3 style="font-family: 'Bowlby One', sans-serif; font-weight: 400; font-size: 32px; margin: 48px 0 16px; color: var(--ink-dark);">Our Core Team</h3>
+<p style="color: var(--ink-2); margin-bottom: 30px; font-family: var(--sans);">Click on any Team card to view the Head and Team Members</p>
+
+<div class="departments-grid" id="deptGrid">
+
+  <!-- Digital Media Team Card -->
+  <div class="dept-click-card" data-dept="digital">
+    <h3>DIGITAL MEDIA<br>TEAM</h3>
+    <div class="dept-head-name">Shahiryar Siddique </div>
+    <div class="dept-head-role">HEAD OF GIGITAL MEDIA</div>
+  </div>
+
+  <!-- Social Media Team Card -->
+  <div class="dept-click-card" data-dept="social">
+    <h3>SOCIAL MEDIA<br>TEAM</h3>
+    <div class="dept-head-name">Ayesha Fatima</div>
+    <div class="dept-head-role">HEAD OF SOCIAL MEDIA</div>
+  </div>
+
+  <!-- Student Affairs Team Card -->
+  <div class="dept-click-card" data-dept="affairs">
+    <h3>STUDENT<br>AFFAIRS</h3>
+    <div class="dept-head-name">Naeem Abbas</div>
+    <div class="dept-head-role">HEAD OF STUDENT AFFAIRS</div>
+  </div>
+
+  <!-- Event Management Team Card -->
+  <div class="dept-click-card" data-dept="event">
+    <h3>EVENT<br>MANAGEMENT</h3>
+    <div class="dept-head-name">Muhammad Samiullah</div>
+    <div class="dept-head-role">HEAD OF EVENT MANAGEMENT</div>
+  </div>
+
+  <!-- Finance Team Card -->
+  <div class="dept-click-card" data-dept="finance">
+    <h3>FINANCE<br>TEAM</h3>
+    <div class="dept-head-name">MHuhammad Hussain</div>
+    <div class="dept-head-role">HEAD OF FINANCE</div>
+  </div>
+
+  <!-- Design Team Card -->
+  <div class="dept-click-card" data-dept="design">
+    <h3>DESIGN<br>TEAM</h3>
+    <div class="dept-head-name">Muhammad Zeshan</div>
+    <div class="dept-head-role">HEAD OF DESIGN</div>
+  </div>
+
+  <!-- Society Coordination Team Card -->
+  <div class="dept-click-card" data-dept="coordination">
+    <h3>SOCIETY<br>COORDINATION</h3>
+    <div class="dept-head-name">Farhan Ahmad</div>
+    <div class="dept-head-role">HEAD OF SOCIETY COORDINATION</div>
+  </div>
+
+ <!-- Tech Management Team Card -->
+  <div class="dept-click-card" data-dept="tech">
+  <h3>TECH<br>MANAGEMENT</h3>
+  <div class="dept-head-name">Muhammad Ammar</div>
+  <div class="dept-head-role">HEAD OF TECH MANAGEMENT</div>
+</div>
+</div>
+
+<!-- Container for Expanded Content -->
+<div id="expandedDeptContainer"></div>
+<!-- MEDIA GALLERY - EVENT CARDS -->
+<section class="team-section" id="gallery">
+  <div class="container">
+    <span class="eyebrow">Memories</span>
+    <h2 class="display">Our Media <em>Gallery</em></h2>
+    <p class="lead">Click on any event card to view photos from that event</p>
+    
+    <div class="events-grid" id="eventsGrid">
+      
+      <!-- EVENT 1: CISCO MOU Ceremony -->
+      <div class="event-card" data-event="cisco-mou-ceremony">
+        <img class="event-card-image" src="images/events/cisco-mou-ceremony/1.jpeg" alt="CISCO MOU Ceremony" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 400 300%27%3E%3Crect width=%27400%27 height=%27300%27 fill=%27%233A5C40%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 fill=%27%23D4A343%27%3ECISCO MOU%3C/text%3E%3C/svg%3E'">
+        <div class="event-card-overlay">
+          <div class="event-card-title">AIOU x CISCO</div>
+          <div class="event-card-date">MOU Signing Ceremony 2025</div>
+          <div class="event-card-btn">📸 VIEW PHOTOS →</div>
+        </div>
+      </div>
+      
+      <!-- EVENT 2: AIOU Fest -->
+      <div class="event-card" data-event="aiou-fest">
+        <img class="event-card-image" src="images/events/aiou-fest/1.jpeg" alt="AIOU Fest" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 400 300%27%3E%3Crect width=%27400%27 height=%27300%27 fill=%27%233A5C40%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 fill=%27%23D4A343%27%3EFest%3C/text%3E%3C/svg%3E'">
+        <div class="event-card-overlay">
+          <div class="event-card-title">AIOU Fest</div>
+          <div class="event-card-date">Annual Festival 2025</div>
+          <div class="event-card-btn">📸 VIEW PHOTOS →</div>
+        </div>
+      </div>
+      
+      <!-- EVENT 3: Department of CS -->
+      <div class="event-card" data-event="departmentofcs">
+        <img class="event-card-image" src="images/events/departmentofcs/1.jpeg" alt="Department of CS" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 400 300%27%3E%3Crect width=%27400%27 height=%27300%27 fill=%27%233A5C40%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 fill=%27%23D4A343%27%3ECS Dept%3C/text%3E%3C/svg%3E'">
+        <div class="event-card-overlay">
+          <div class="event-card-title">Department of CS</div>
+          <div class="event-card-date">Highlights & Achievements</div>
+          <div class="event-card-btn">📸 VIEW PHOTOS →</div>
+        </div>
+      </div>
+      
+      <!-- EVENT 4: Open House -->
+      <div class="event-card" data-event="open-house">
+        <img class="event-card-image" src="images/events/open-house/1.jpeg" alt="Open House" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 400 300%27%3E%3Crect width=%27400%27 height=%27300%27 fill=%27%233A5C40%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 fill=%27%23D4A343%27%3EOpen House%3C/text%3E%3C/svg%3E'">
+        <div class="event-card-overlay">
+          <div class="event-card-title">CS Open House</div>
+          <div class="event-card-date">Department Open House 2025</div>
+          <div class="event-card-btn">📸 VIEW PHOTOS →</div>
+        </div>
+      </div>
+      
+      <!-- EVENT 5: Computing Excellence -->
+      <div class="event-card" data-event="computing-excellence">
+        <img class="event-card-image" src="images/events/computing-excellence/2.jpeg" alt="Computing Excellence" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 400 300%27%3E%3Crect width=%27400%27 height=%27300%27 fill=%27%233A5C40%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 fill=%27%23D4A343%27%3EExcellence%3C/text%3E%3C/svg%3E'">
+        <div class="event-card-overlay">
+          <div class="event-card-title">Computing Excellence</div>
+          <div class="event-card-date">Award Ceremony 2025</div>
+          <div class="event-card-btn">📸 VIEW PHOTOS →</div>
+        </div>
+      </div>
+      
+    </div>  <!-- THIS CLOSES THE events-grid -->
+    
+    <!-- Container for Expanded Content - MUST BE OUTSIDE THE GRID -->
+    <div id="expandedEventContainer"></div>
+    
+  </div>  <!-- THIS CLOSES THE container -->
+</section>  <!-- THIS CLOSES THE gallery section -->
+
+<!-- RULES & POLICIES -->
+<section class="team-section" id="rules">
+  <div class="container">
+    <div class="rules-card">
+      <span class="eyebrow">Official Documents</span>
+      <h2 style="font-family: var(--display); font-size: 42px;">Our Rules & Policies</h2>
+      <p style="margin: 20px auto; max-width: 500px; font-family: var(--sans); color: var(--ink-2);">Read the official society bylaws, code of conduct, and membership policies.</p>
+      <a href="Computing Society Rules.pdf" class="btn-download">📄 Download PDF (Rules & Policies) →</a>
+    </div>
+  </div>
+</section>
+<!-- CONTACT SECTION WITH BREATHING SOCIAL BUTTONS -->
+<section class="contact" id="contact" style="padding: 100px 0; background: var(--paper); border-bottom: 2px solid var(--ink);">
+  <div class="container" style="max-width: 1280px; margin: 0 auto; padding: 0 56px;">
+    <div class="contact-grid" style="display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 80px; align-items: start;">
+      
+      <!-- LEFT SIDE - TEXT & SOCIALS -->
+      <div class="contact-text">
+        <span class="eyebrow">Get in touch</span>
+        <h2 class="display">Connect<br>with us.</h2>
+        <p class="lead" style="margin-bottom: 32px;">
+          Want to join, volunteer, or just say hi? Reach out to us. We reply to most things.
+        </p>
+
+        <ul class="contact-meta" style="list-style: none; margin-top: 40px; display: flex; flex-direction: column; gap: 18px;">
+          <li style="display: grid; grid-template-columns: 110px 1fr; gap: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(26,17,8,0.15);">
+            <span class="cm-label" style="font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-3);">Email</span>
+            <span class="cm-value">computing.society.dcs.aiou@gmail.com</span>
+          </li>
+          <li style="display: grid; grid-template-columns: 110px 1fr; gap: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(26,17,8,0.15);">
+            <span class="cm-label" style="font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-3);">Headquarters</span>
+            <span class="cm-value">Department of CS, AIOU, Islamabad</span>
+          </li>
+          <li style="display: grid; grid-template-columns: 110px 1fr; gap: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(26,17,8,0.15);">
+            <span class="cm-label" style="font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-3);">Made By</span>
+            <span class="cm-value">Ahmad Aizaz <span style="color: var(--saffron-deep);">· Founder of the Site</span></span>
+          </li>
+        </ul>
+        
+        <!-- FOLLOW OUR SOCIALS SECTION WITH BREATHING BUTTONS -->
+        <div style="margin-top: 48px;">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
+            <div style="width: 40px; height: 2px; background: var(--saffron-deep);"></div>
+            <span style="font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; color: var(--ink-2);">FOLLOW OUR SOCIALS</span>
+          </div>
+          
+          <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+            
+            <!-- LINKEDIN BREATHING BUTTON -->
+            <a href="https://www.linkedin.com/company/thecomputingsocietyaiou/" target="_blank" class="social-breathing-btn" style="display: inline-flex; align-items: center; gap: 12px; background: #0A66C2; padding: 14px 28px; border-radius: 60px; text-decoration: none; color: white; font-family: var(--condensed); font-size: 14px; font-weight: 600; letter-spacing: 0.1em; border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s ease;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C0.792 0 0 0.774 0 1.729v20.542C0 23.227 0.792 24 1.771 24h20.451c0.979 0 1.771-0.773 1.771-1.729V1.729C24 0.774 23.203 0 22.225 0z"/>
+              </svg>
+              <span>LINKEDIN</span>
+            </a>
+            
+            <!-- INSTAGRAM BREATHING BUTTON -->
+            <a href="https://www.instagram.com/computing_society_aiou/" target="_blank" class="social-breathing-btn" style="display: inline-flex; align-items: center; gap: 12px; background: linear-gradient(135deg, #833AB4, #E4405F, #F77737); padding: 14px 28px; border-radius: 60px; text-decoration: none; color: white; font-family: var(--condensed); font-size: 14px; font-weight: 600; letter-spacing: 0.1em; border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s ease;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+              </svg>
+              <span>INSTAGRAM</span>
+            </a>
+            
+          </div>
+        </div>
+      </div>
+      
+      <!-- RIGHT SIDE - GOOGLE FORM -->
+      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfGg3K_VvbNkRYcdhxia5oQkE7ySeqzpMGtgERIst5-ZivZbg/viewform?usp=publish-editor" width="100%" height="1565" frameborder="0" marginheight="0" marginwidth="0" style="border: 3px solid var(--ink); border-radius: 20px; background: var(--paper);">Loading…</iframe>
+      
+    </div>
+  </div>
+</section>
+
+<style>
+  /* BREATHING ANIMATION FOR SOCIAL BUTTONS */
+  .social-breathing-btn {
+    animation: breathe 2.2s ease-in-out infinite;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+  
+  .social-breathing-btn:hover {
+    animation: none;
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    filter: brightness(1.05);
+  }
+  
+  @keyframes breathe {
+    0%, 100% {
+      transform: scale(1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    50% {
+      transform: scale(1.03);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+  }
+  
+  /* Hover pulse effect */
+  .social-breathing-btn:active {
+    transform: scale(0.98);
+    transition: 0.05s;
+  }
+</style>
+
+<!-- FOOTER - FULL WIDTH -->
+<footer class="footer" style="width: 100%; margin: 0;">
+  <div class="container" style="max-width: 1280px; margin: 0 auto; padding: 0 56px;">
+    <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+      <span>© 2025 The Computing Society — AIOU. All rights reserved</span>
+      <div style="display: flex; gap: 24px;">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Made by Ahmad Aizaz</a>
+        <a href="#">Code of Conduct</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</footer>
+
+<script>
+
+  // ========== EVENT GALLERY (Click to Expand) ==========
+const eventData = {
+  // EVENT 1: CISCO MOU Ceremony
+  "cisco-mou-ceremony": {
+    title: "AIOU x CISCO MOU Signing Ceremony",
+    date: "2025",
+    photos: [
+      "images/events/cisco-mou-ceremony/1.jpeg",
+      "images/events/cisco-mou-ceremony/2.jpeg",
+      "images/events/cisco-mou-ceremony/3.jpeg",
+      "images/events/cisco-mou-ceremony/4.jpeg",
+      "images/events/cisco-mou-ceremony/5.jpeg",
+      "images/events/cisco-mou-ceremony/6.jpeg",
+      "images/events/cisco-mou-ceremony/7.jpeg",
+      "images/events/cisco-mou-ceremony/8.jpeg",
+      "images/events/cisco-mou-ceremony/9.jpeg",
+      "images/events/cisco-mou-ceremony/10.jpeg",
+      "images/events/cisco-mou-ceremony/11.jpeg",
+      "images/events/cisco-mou-ceremony/12.jpeg",
+      "images/events/cisco-mou-ceremony/13.jpeg"
+    ]
+  },
+  
+  // EVENT 2: AIOU Fest
+  "aiou-fest": {
+    title: "AIOU Fest 2025",
+    date: "2025",
+    photos: [
+      "images/events/aiou-fest/1.jpeg",
+      "images/events/aiou-fest/6.jpeg",
+      "images/events/aiou-fest/3.jpeg",
+      "images/events/aiou-fest/4.jpeg",
+      "images/events/aiou-fest/5.jpeg"
+      // Add more as needed, just add commas and continue
+    ]
+  },
+  
+  // EVENT 3: Department of CS
+  "departmentofcs": {
+    title: "Department of Computer Science",
+    date: "2025",
+    photos: [
+      "images/events/departmentofcs/1.jpeg",
+      "images/events/departmentofcs/2.jpeg",
+      "images/events/departmentofcs/3.jpeg",
+      "images/events/departmentofcs/4.jpeg",
+      "images/events/departmentofcs/5.jpeg",
+    ]
+  },
+  
+  // EVENT 4: Open House
+  "open-house": {
+    title: "CS Open House 2025",
+    date: "2025",
+    photos: [
+      "images/events/open-house/1.jpeg",
+      "images/events/open-house/2.jpeg",
+      "images/events/open-house/3.jpeg",
+      "images/events/open-house/4.jpeg",
+      "images/events/open-house/5.jpeg",
+      "images/events/open-house/6.jpeg",
+    ]
+  },
+  
+  // EVENT 5: Computing Excellence
+  "computing-excellence": {
+    title: "Computing Excellence Award 2025",
+    date: "2025",
+    photos: [
+      "images/events/computing-excellence/1.jpeg",
+      "images/events/computing-excellence/2.jpeg",
+      "images/events/computing-excellence/3.jpeg",
+      "images/events/computing-excellence/4.jpeg",
+      "images/events/computing-excellence/5.jpeg",
+      "images/events/computing-excellence/6.jpeg",
+      "images/events/computing-excellence/7.jpeg",
+      "images/events/computing-excellence/8.jpeg",
+      "images/events/computing-excellence/9.jpeg",
+      "images/events/computing-excellence/10.jpeg",
+      "images/events/computing-excellence/11.jpeg",
+      "images/events/computing-excellence/12.jpeg",
+    ]
+  }
+};
+
+function createEventExpandedView(eventId, data) {
+  const photosHtml = data.photos.map((photo, index) => `
+    <div class="event-photo-item">
+      <img src="${photo}" alt="${data.title} - Photo ${index + 1}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 200 150%27%3E%3Crect width=%27200%27 height=%27150%27 fill=%27%23D4C5B2%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 fill=%27%235C4033%27%3EPhoto%3C/text%3E%3C/svg%3E'">
+    </div>
+  `).join('');
+  
+  return `
+    <div class="event-expanded show" id="expanded-${eventId}">
+      <div class="event-expand-close">
+        <button class="close-event-btn" onclick="closeEvent('${eventId}')">✕ Close Gallery</button>
+      </div>
+      <h3 style="font-family: var(--display); font-size: 24px; margin-bottom: 15px;">📸 ${data.title}</h3>
+      <div class="event-photos-grid">
+        ${photosHtml}
+      </div>
+    </div>
+  `;
+}
+
+function closeEvent(eventId) {
+  const container = document.getElementById('expandedEventContainer');
+  if (container) {
+    container.innerHTML = '';
+    currentOpenEvent = null;
+  }
+}
+
+// Add click handlers to event cards
+document.querySelectorAll('.event-card').forEach(card => {
+  card.addEventListener('click', function() {
+    const eventId = this.getAttribute('data-event');
+    const container = document.getElementById('expandedEventContainer');
+    const data = eventData[eventId];
+    
+    if (!container || !data) return;
+    
+    if (currentOpenEvent === eventId) {
+      container.innerHTML = '';
+      currentOpenEvent = null;
+      return;
+    }
+    
+    container.innerHTML = createEventExpandedView(eventId, data);
+    currentOpenEvent = eventId;
+    
+    // Add lightbox to event photos
+    container.querySelectorAll('.event-photo-item').forEach(item => {
+      item.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const img = this.querySelector('img');
+        if (img && window.openLightbox) {
+          window.openLightbox(img.src, data.title, 'Event Photo');
+        } else {
+          // Simple alert as fallback
+          alert('Click photo to enlarge - Lightbox coming!');
+        }
+      });
+    });
+    
+    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+// ========== DEPARTMENT DATA ==========
+const departmentData = {
+  // DIGITAL MEDIA TEAM
+  digital: {
+    head: {
+      name: "Shahryar Siddique",
+      role: "Head of Digital Media",
+      bio: "Managing digital content and multimedia production. Focus on creating engaging content for all society platforms.",
+      photo: "images/digital-media/sherry_sid.png"
+    },
+    members: [
+      { name: "Muhammad Hassan", role: "Director of Digital Media", photo: "images/digital-media/3.png", bio: "Leads the digital media team with expertise in video editing, visual storytelling, and creative media production." },
+      { name: "Ahsan Khalid", role: "Photographer", photo: "images/digital-media/5.png", bio: "Captures memorable moments through creative photography and event coverage with a sharp visual eye." },
+      { name: "Urooj Gul", role: "Videographer", photo: "images/digital-media/4.png", bio: "Specialized in cinematic videography, creating engaging visual content and dynamic event highlights." },
+      { name: "Minahil Sherazi", role: "Videographer", photo: "images/digital-media/2.png", bio: "Passionate about storytelling through video production, editing, and creative media direction." },
+      { name: "Seerat Gilani", role: "Photographer", photo: "images/digital-media/1.png", bio: "Focused on capturing impactful visuals and documenting events with creativity and precision." }
+    ]
+  },
+  // SOCIAL MEDIA TEAM
+  social: {
+    head: {
+      name: "Ayesha Fatima",
+      role: "Head of Social Media",
+      bio: "Managing online presence and digital outreach across all platforms.",
+      photo: "images/social-media/ayesha_fatima.png"
+    },
+    members: [
+      { name: "Muneeb Ur Rehman", role: "Director of Social Media", photo: "images/social-media/3.png", bio: "Lead the community engagement." },
+      { name: "Noor Farhan", role: "Social Media Manager", photo: "images/social-media/4.png", bio: "Managing daily posts and community engagement." },
+      { name: "Sheeza Fatima", role: "Social Media Manager", photo: "images/social-media/5.png", bio: "Managing daily posts and community engagement." }
+    ]
+  },
+  // STUDENT AFFAIRS TEAM
+  affairs: {
+    head: {
+      name: "Naeem Abbas",
+      role: "Head of Student Affairs",
+      bio: "Addressing student concerns and welfare.",
+      photo: "images/student-affairs/naeem_abbas.png"
+    },
+    members: [
+      { name: "Muhammad Usman Malik", role: "Director of Student Affairs", photo: "images/student-affairs/3.png", bio: "Coordinates between students and faculty." },
+      { name: "Yasir Ijaz", role: "Member of Student Affairs", photo: "images/student-affairs/4.png", bio: "Helps in Coordination." },
+      { name: "Muhammad Usman Malik", role: "Member of Student Affairs", photo: "images/student-affairs/5.png", bio: "Helps in Coordination." }
+    ]
+  },
+  // EVENT MANAGEMENT TEAM
+  event: {
+    head: {
+      name: "Muhammad Samiullah",
+      role: "Head of Event Management",
+      bio: "Planning and executing society events.",
+      photo: "images/event-management/m_sami.png"
+    },
+    members: [
+      { name: "Muhammad Husnain Afridi", role: "Head of Coordination", photo: "images/event-management/4.png", bio: "Manages all the internal Affairs of the Society." },
+      { name: "Muhammad Hamza Malik", role: "Member of Coordination Team", photo: "images/event-management/6.png", bio: "Assists in Management of all the internal Affairs of the Society." },
+      { name: "Ahmad Ishfaq", role: "Member of Coordination Team", photo: "images/event-management/5.png", bio: "Assists in Management of all the internal Affairs of the Society." },
+      { name: "Mursaleen Kiyani", role: "Member of Coordination Team", photo: "images/event-management/8.png", bio: "Assists in Management of all the internal Affairs of the Society." },
+      { name: "Muhammad Hamza Saeed", role: "Member of Coordination Team", photo: "images/event-management/7.png", bio: "Assists in Management of all the internal Affairs of the Society." },
+      { name: "Adnan Ahmad", role: "Member of Coordination Team", photo: "images/event-management/3.png", bio: "Assists in Management of all the internal Affairs of the Society." }
+    ]
+  },
+  // FINANCE TEAM
+  finance: {
+    head: {
+      name: "M Hussain",
+      role: "Finance Secretary",
+      bio: "Managing budgets and financial planning.",
+      photo: "images/finance/m_hussain.png"
+    },
+    members: [
+      { name: "Isma Ehtisham", role: "Director of Finance", photo: "images/finance/4.png", bio: "Manages the budget tracking and expenses." },
+      { name: "Tayyaba Shakoor", role: "Finance Assistant", photo: "images/finance/3.png", bio: "Assists with budget tracking and expenses." }
+    ]
+  },
+  // DESIGN TEAM
+  design: {
+    head: {
+      name: "M Zeshan",
+      role: "Head of Design",
+      bio: "Creating visual designs and branding materials.",
+      photo: "images/design/m_zeshan.png"
+    },
+    members: [
+      { name: "Abdullah Saad", role: "Head of Social Affairs", photo: "images/design/abd_saad.png", bio: "Manages the Social Affairs of the Society." },
+      { name: "Asma Naseem", role: "Graphic Designer", photo: "images/design/Asma.png", bio: "The Lead Graphics Head!" },
+      { name: "Nimra Qadir", role: "Photographer", photo: "images/design/nimra.png", bio: "Captures moments for the Design Team." },
+      { name: "Neha Javed", role: "Content Head", photo: "images/design/neha.png", bio: "She Manages the Content for the Design Team." },
+      { name: "Mohsin Khan", role: "Researcher", photo: "images/design/mohsin.png", bio: "Researcher for the Design Team." }
+    ]
+  },
+  // TECH MANAGEMENT TEAM
+  tech: {
+    head: {
+      name: "Muhammad Amaar",
+      role: "Head of Tech Management",
+      bio: "Oversees all technical operations, infrastructure, and development projects.",
+      photo: "images/tech-management/3.png"
+    },
+    members: [
+      { name: "Fasil", role: "Tech Lead", photo: "images/tech-management/4.png", bio: "Manages technical projects and development team." },
+      { name: "Muhammad Anas", role: "System Administrator", photo: "images/tech-management/2.png", bio: "Handles servers, databases, and technical infrastructure." }
+    ]
+  },
+  // SOCIETY COORDINATION TEAM
+  coordination: {
+    head: {
+      name: "Farhan Ahmad",
+      role: "Head of Society Coordination",
+      bio: "Coordinating between different society departments.",
+      photo: "images/coordination/farhan_ahmad.png"
+    },
+    members: [
+      { name: "Tayyab Abbasi", role: "Director of Society Coordination", photo: "images/coordination/4.png", bio: "Leads the coordination efforts." },
+      { name: "Habibullah", role: "Director of Sports Coordination", photo: "images/coordination/3.png", bio: "Assists with sports coordination." },
+      { name: "Saad Aziz", role: "Member of Society Coordination", photo: "images/coordination/5.png", bio: "Assists with society coordination." },
+      { name: "Maira Muskan", role: "Member of Society Coordination", photo: "images/coordination/6.png", bio: "Assists with society coordination." },
+      { name: "Taha Anwer", role: "Member of Society Coordination", photo: "images/coordination/7.png", bio: "Assists with society coordination." },
+      { name: "Usman Khalid", role: "Member of Society Coordination", photo: "images/coordination/8.png", bio: "Leads the coordination efforts." }
+    ]
+  }
+};
+
+// Track currently open department
+let currentOpenDept = null;
+let currentOpenEvent = null;
+
+// Function to create expanded view HTML
+function createExpandedView(data, deptId) {
+  let membersHtml = '';
+  if (data.members && data.members.length > 0) {
+    membersHtml = data.members.map((member, index) => `
+      <div class="member-card-small" data-member="${deptId}-${index}">
+        <img class="member-photo-small" src="${member.photo}" alt="${member.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 fill=%27%23D4C5B2%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 dy=%27.3em%27 fill=%27%235C4033%27 font-size=%2740%27%3E${member.name.charAt(0)}%3C/text%3E%3C/svg%3E'">
+        <div class="member-name-small">${member.name}</div>
+        <div class="member-role-small">${member.role}</div>
+        <div class="member-arrow">▼</div>
+        <div class="member-bio-expanded" id="member-bio-${deptId}-${index}">
+          <p>${member.bio || 'No bio available.'}</p>
+        </div>
+      </div>
+    `).join('');
+  } else {
+    membersHtml = '<p style="color: var(--ink-2); text-align: center; grid-column: 1/-1; padding: 20px;">No team members added yet.</p>';
+  }
+  
+  return `
+    <div class="dept-expanded show" id="expanded-${deptId}">
+      <div class="head-card-large" data-head="${deptId}">
+        <img class="head-photo" src="${data.head.photo}" alt="${data.head.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 140 140%27%3E%3Crect width=%27140%27 height=%27140%27 fill=%27%23D4C5B2%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 dy=%27.3em%27 fill=%27%235C4033%27 font-size=%2750%27%3E${data.head.name.charAt(0)}%3C/text%3E%3C/svg%3E'">
+        <div class="head-details">
+          <h4>${data.head.name}</h4>
+          <span class="head-role-badge">${data.head.role}</span>
+        </div>
+        <div class="click-arrow">▼</div>
+      </div>
+      <div class="head-bio-expanded" id="head-bio-${deptId}">
+        <p>${data.head.bio}</p>
+      </div>
+      <div class="team-subtitle">TEAM MEMBERS</div>
+      <div class="members-flex-grid">
+        ${membersHtml}
+      </div>
+    </div>
+  `;
+}
+
+// Attach expandable handlers
+function attachExpandableHandlers(deptId) {
+  const headCard = document.querySelector(`[data-head="${deptId}"]`);
+  const headBio = document.getElementById(`head-bio-${deptId}`);
+  const headArrow = headCard ? headCard.querySelector('.click-arrow') : null;
+  
+  if (headCard && headBio) {
+    const newHeadCard = headCard.cloneNode(true);
+    headCard.parentNode.replaceChild(newHeadCard, headCard);
+    const finalHeadCard = document.querySelector(`[data-head="${deptId}"]`);
+    const finalHeadArrow = finalHeadCard ? finalHeadCard.querySelector('.click-arrow') : null;
+    const finalHeadBio = document.getElementById(`head-bio-${deptId}`);
+    finalHeadCard.addEventListener('click', function(e) {
+      if (e.target.closest('.member-card-small')) return;
+      finalHeadBio.classList.toggle('show');
+      if (finalHeadArrow) finalHeadArrow.classList.toggle('rotated');
+    });
+  }
+  
+  document.querySelectorAll('.member-card-small').forEach(member => {
+    const memberBio = member.querySelector('.member-bio-expanded');
+    const memberArrow = member.querySelector('.member-arrow');
+    const newMember = member.cloneNode(true);
+    member.parentNode.replaceChild(newMember, member);
+    const finalMember = newMember;
+    const finalMemberBio = finalMember.querySelector('.member-bio-expanded');
+    const finalMemberArrow = finalMember.querySelector('.member-arrow');
+    finalMember.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (finalMemberBio) {
+        finalMemberBio.classList.toggle('show');
+        if (finalMemberArrow) finalMemberArrow.classList.toggle('rotated');
+      }
+    });
+  });
+}
+
+// Department card click listeners
+document.querySelectorAll('.dept-click-card').forEach(card => {
+  card.addEventListener('click', function() {
+    const deptId = this.getAttribute('data-dept');
+    const container = document.getElementById('expandedDeptContainer');
+    if (!container) return;
+    if (currentOpenDept === deptId) {
+      container.innerHTML = '';
+      currentOpenDept = null;
+      return;
+    }
+    const data = departmentData[deptId];
+    if (data) {
+      container.innerHTML = createExpandedView(data, deptId);
+      currentOpenDept = deptId;
+      setTimeout(() => attachExpandableHandlers(deptId), 50);
+      container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    const targetId = this.getAttribute('href');
+    if (targetId === "#" || targetId === "") return;
+    const target = document.querySelector(targetId);
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+});
+</script>
+
+<script>
+// COMPLETE FIXED PHOTO CLICK - WORKS FOR EVERYTHING
+(function() {
+  // Create lightbox if it doesn't exist
+  let lb = document.getElementById('simpleLightbox');
+  if (!lb) {
+    lb = document.createElement('div');
+    lb.id = 'simpleLightbox';
+    lb.style.cssText = 'display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:999999;align-items:center;justify-content:center;cursor:pointer;';
+    lb.innerHTML = `
+      <div style="max-width:90%;text-align:center;">
+        <img id="slImage" style="max-width:100%;max-height:70vh;border-radius:20px;border:4px solid #E0651E;">
+        <div id="slName" style="font-family:'Bowlby One',sans-serif;font-size:28px;color:white;margin-top:20px;"></div>
+        <div id="slRole" style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#F0823A;margin-top:8px;"></div>
+      </div>
+      <span id="slClose" style="position:absolute;top:30px;right:40px;font-size:50px;color:white;cursor:pointer;">&times;</span>
+    `;
+    document.body.appendChild(lb);
+  }
+  
+  const lightbox = document.getElementById('simpleLightbox');
+  const lightboxImg = document.getElementById('slImage');
+  const lightboxName = document.getElementById('slName');
+  const lightboxRole = document.getElementById('slRole');
+  const closeBtn = document.getElementById('slClose');
+  
+  function openLightbox(imgSrc, name, role) {
+    lightboxImg.src = imgSrc;
+    lightboxName.textContent = name || 'Team Member';
+    lightboxRole.textContent = role || '';
+    lightbox.style.display = 'flex';
+  }
+  
+  function closeLightbox() {
+    lightbox.style.display = 'none';
+  }
+  
+  if (closeBtn) closeBtn.onclick = closeLightbox;
+  lightbox.onclick = function(e) { if (e.target === lightbox) closeLightbox(); };
+  
+  // Make ALL photos clickable - COMPLETE FUNCTION
+  function makeAllPhotosClickable() {
+    
+        // 1. EXECUTIVE TEAM photos - FIXED
+    document.querySelectorAll('.gallery-item img').forEach(function(img) {
+      if (img.hasClick) return;
+      img.hasClick = true;
+      img.style.cursor = 'zoom-in';
+      img.onclick = function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        
+        // Get the parent gallery-item container
+        var container = this.closest('.gallery-item');
+        var name = '';
+        var role = '';
+        
+        if (container) {
+          // Look specifically for team-name and team-role
+          var nameEl = container.querySelector('.team-name');
+          var roleEl = container.querySelector('.team-role');
+          
+          if (nameEl) {
+            name = nameEl.innerText || nameEl.textContent;
+          }
+          if (roleEl) {
+            role = roleEl.innerText || roleEl.textContent;
+          }
+          
+          // Debug: log to console to verify it's finding the names
+          console.log('Executive Photo Clicked:', name, role);
+        }
+        
+        openLightbox(this.src, name, role);
+      };
+    });
+    
+    // 2. Department Head photos
+    document.querySelectorAll('.head-photo').forEach(img => {
+      if (img.hasClick) return;
+      img.hasClick = true;
+      img.style.cursor = 'zoom-in';
+      img.onclick = function(e) {
+        e.stopPropagation();
+        const container = this.closest('.head-card-large');
+        const name = container?.querySelector('h4')?.innerText || 'Team Member';
+        const role = container?.querySelector('.head-role-badge')?.innerText || '';
+        openLightbox(this.src, name, role);
+      };
+    });
+    
+    // 3. Team Member photos
+    document.querySelectorAll('.member-photo-small').forEach(img => {
+      if (img.hasClick) return;
+      img.hasClick = true;
+      img.style.cursor = 'zoom-in';
+      img.onclick = function(e) {
+        e.stopPropagation();
+        const container = this.closest('.member-card-small');
+        const name = container?.querySelector('.member-name-small')?.innerText || 'Team Member';
+        const role = container?.querySelector('.member-role-small')?.innerText || '';
+        openLightbox(this.src, name, role);
+      };
+    });
+    
+    // 4. EVENT GALLERY PHOTOS (when event expands)
+    document.querySelectorAll('.event-photo-item img').forEach(img => {
+      if (img.hasClick) return;
+      img.hasClick = true;
+      img.style.cursor = 'zoom-in';
+      img.onclick = function(e) {
+        e.stopPropagation();
+        const container = this.closest('.event-expanded');
+        const eventTitle = container?.querySelector('h3')?.innerText || 'Event Photo';
+        openLightbox(this.src, eventTitle, 'Event Photo');
+      };
+    });
+  }
+  
+  // Run once
+  makeAllPhotosClickable();
+  
+  // Watch for new content (when departments expand or events expand)
+  const observer = new MutationObserver(function() {
+    makeAllPhotosClickable();
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+  
+})();
+
+</script>
+</script>
+</body>
+</html>
